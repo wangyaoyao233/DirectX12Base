@@ -1,5 +1,6 @@
 
-
+Texture2D texture0 : register(t0);
+SamplerState sampler0 : register(s0);
 
 struct PS_INPUT
 {
@@ -13,5 +14,5 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-	return input.Diffuse;
+    return input.Diffuse * texture0.Sample(sampler0, input.TexCoord);
 }

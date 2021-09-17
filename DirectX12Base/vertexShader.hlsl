@@ -10,7 +10,6 @@ struct VS_INPUT
     float3 Position : POSITION;
     float3 Normal   : NORMAL;
     float2 TexCoord : TEXCOORD;
-    float3 Color    : COLOR;
 };
 
 struct PS_INPUT

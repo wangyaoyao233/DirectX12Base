@@ -183,12 +183,23 @@ void CRenderer::Initialize()
 	////////////////////////////////////
 	//ルートシグネチャ生成
 	{
-		D3D12_ROOT_PARAMETER rootParameters[1]{};
+		D3D12_ROOT_PARAMETER rootParameters[2]{};
 
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 		rootParameters[0].Descriptor.ShaderRegister = 0;
 		rootParameters[0].Descriptor.RegisterSpace = 0;
+
+		D3D12_DESCRIPTOR_RANGE range[1]{};
+		range[0].NumDescriptors = 1;
+		range[0].BaseShaderRegister = 0;
+		range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+		range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
+		rootParameters[1].DescriptorTable.pDescriptorRanges = &range[0];
 
 		//サンプラー
 		D3D12_STATIC_SAMPLER_DESC samplerDesc{};
@@ -269,7 +280,6 @@ void CRenderer::Initialize()
 			{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0},
 			{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0},
 			{"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,24,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0},
-			{"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,32,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0},
 		};
 		pipelineStateDesc.InputLayout.pInputElementDescs = InputElementDesc;
 		pipelineStateDesc.InputLayout.NumElements = _countof(InputElementDesc);

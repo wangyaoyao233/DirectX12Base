@@ -57,12 +57,12 @@ void CPolygon::Initialize()
 	buffer[1].TexCoord = { 1.0f,0.0f };
 	buffer[2].TexCoord = { 0.0f,1.0f };
 	buffer[3].TexCoord = { 1.0f,1.0f };
-	buffer[0].Color = { 0.0f,1.0f,0.0f };
-	buffer[1].Color = { 0.0f,1.0f,0.0f };
-	buffer[2].Color = { 0.0f,1.0f,0.0f };
-	buffer[3].Color = { 0.0f,1.0f,0.0f };
 
 	m_VertexBuffer->Unmap(0, nullptr);
+
+	// テクスチャ読み込み
+	m_Texture.Load("asset/field004.tga");
+	//m_Texture.Load("asset/paimeng.jpg");
 }
 
 void CPolygon::Update()
@@ -84,10 +84,6 @@ void CPolygon::Update()
 	//buffer[1].TexCoord = { 1.0f,0.0f };
 	//buffer[2].TexCoord = { 0.0f,1.0f };
 	//buffer[3].TexCoord = { 1.0f,1.0f };
-	//buffer[0].Color = { 0.0f,1.0f,0.0f };
-	//buffer[1].Color = { 0.0f,1.0f,0.0f };
-	//buffer[2].Color = { 0.0f,1.0f,0.0f };
-	//buffer[3].Color = { 0.0f,1.0f,0.0f };
 
 	//m_VertexBuffer->Unmap(0, nullptr);
 }
@@ -122,6 +118,11 @@ void CPolygon::Draw(ID3D12GraphicsCommandList* CommandList)
 	vertexView.StrideInBytes = sizeof(Vertex3D);
 	vertexView.SizeInBytes = sizeof(Vertex3D) * 4;
 	CommandList->IASetVertexBuffers(0, 1, &vertexView);
+
+	//テクスチャ設定
+	ID3D12DescriptorHeap* dh[] = { *m_Texture.GetDescriptorHeap().GetAddressOf() };
+	CommandList->SetDescriptorHeaps(_countof(dh), dh);
+	CommandList->SetGraphicsRootDescriptorTable(1, m_Texture.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	//トボロジ設定
 	CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);

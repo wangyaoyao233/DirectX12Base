@@ -9,7 +9,6 @@ struct Vertex3D
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
 	XMFLOAT2 TexCoord;
-	XMFLOAT3 Color;
 };
 
 struct Constant
