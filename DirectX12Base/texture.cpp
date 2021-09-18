@@ -42,19 +42,17 @@ void CTexture::TGALoad(const char* FileName, std::vector<char>& image, unsigned 
 	// 画像読み込み
 	file.read(&image[0], size);
 
-	/*
-		// R<->B
-		for (unsigned int y = 0; y < height; y++)
+	// R<->B
+	for (unsigned int y = 0; y < height; y++)
+	{
+		for (unsigned int x = 0; x < width; x++)
 		{
-			for (unsigned int x = 0; x < width; x++)
-			{
-				unsigned char c;
-				c = image[(y * width + x) * bpp + 0];
-				image[(y * width + x) * bpp + 0] = image[(y * width + x) * bpp + 2];
-				image[(y * width + x) * bpp + 2] = c;
-			}
+			unsigned char c;
+			c = image[(y * width + x) * bpp + 0];
+			image[(y * width + x) * bpp + 0] = image[(y * width + x) * bpp + 2];
+			image[(y * width + x) * bpp + 2] = c;
 		}
-	*/
+	}
 
 	file.close();
 }
@@ -68,7 +66,7 @@ void CTexture::Load(const char* FileName)
 
 	//TGALoad(FileName, image, width, height);
 
-	pixels = stbi_load(FileName, &width, &height, &bpp, 0);
+	pixels = stbi_load(FileName, &width, &height, &bpp, 4);
 
 	ComPtr<ID3D12Device> device = CRenderer::GetInstance()->GetDevice();
 	HRESULT hr{};
@@ -89,7 +87,6 @@ void CTexture::Load(const char* FileName)
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	resourceDesc.Width = width;
 	resourceDesc.Height = height;
-	//resourceDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	resourceDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 
@@ -112,7 +109,6 @@ void CTexture::Load(const char* FileName)
 	D3D12_CPU_DESCRIPTOR_HANDLE handleSrv{};
 	D3D12_SHADER_RESOURCE_VIEW_DESC resourceViewDesc{};
 
-	//resourceViewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	resourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	resourceViewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	resourceViewDesc.Texture2D.MipLevels = 1;
@@ -129,6 +125,9 @@ void CTexture::Load(const char* FileName)
 	//画像データ書込
 	D3D12_BOX box = { 0, 0, 0, (UINT)width, (UINT)height, 1 };
 	hr = m_Resource->WriteToSubresource(0, &box, &pixels[0],
-		bpp * width, bpp * width * height);
+		4 * width, 4 * width * height);
 	assert(SUCCEEDED(hr));
+
+	//release stbi image data
+	stbi_image_free(pixels);
 }

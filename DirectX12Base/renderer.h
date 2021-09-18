@@ -1,8 +1,10 @@
 #pragma once
 
-#include "polygon.h"
 using namespace DirectX;
 using namespace Microsoft::WRL;
+
+#include "polygon.h"
+#include "field.h"
 
 struct Vertex3D
 {
@@ -53,6 +55,7 @@ private:
 	D3D12_VIEWPORT						m_Viewport;
 
 	std::unique_ptr<CPolygon>			m_Polygon;
+	std::unique_ptr<CField>				m_Field;
 
 public:
 

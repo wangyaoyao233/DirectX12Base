@@ -1,13 +1,13 @@
 #include "main.h"
 #include "renderer.h"
-#include "polygon.h"
+#include "field.h"
 
-CPolygon::CPolygon()
+CField::CField()
 {
 	Initialize();
 }
 
-void CPolygon::Initialize()
+void CField::Initialize()
 {
 	ComPtr<ID3D12Device> device = CRenderer::GetInstance()->GetDevice();
 
@@ -45,55 +45,37 @@ void CPolygon::Initialize()
 	hr = m_VertexBuffer->Map(0, nullptr, (void**)&buffer);
 	assert(SUCCEEDED(hr));
 
-	buffer[0].Position = { 0.0f,0.0f,0.0f };
-	buffer[1].Position = { 100.0f,0.0f,0.0f };
-	buffer[2].Position = { 0.0f,100.0f,0.0f };
-	buffer[3].Position = { 100.0f,100.0f,0.0f };
+	buffer[0].Position = { -10.0f,0.0f,0.0f };
+	buffer[1].Position = { -10.0f,0.0f,10.0f };
+	buffer[2].Position = { 10.0f,0.0f,0.0f };
+	buffer[3].Position = { 10.0f,0.0f,10.0f };
 	buffer[0].Normal = { 0.0f,1.0f,0.0f };
 	buffer[1].Normal = { 0.0f,1.0f,0.0f };
 	buffer[2].Normal = { 0.0f,1.0f,0.0f };
 	buffer[3].Normal = { 0.0f,1.0f,0.0f };
 	buffer[0].TexCoord = { 0.0f,0.0f };
-	buffer[1].TexCoord = { 1.0f,0.0f };
-	buffer[2].TexCoord = { 0.0f,1.0f };
-	buffer[3].TexCoord = { 1.0f,1.0f };
+	buffer[1].TexCoord = { 0.0f,10.0f };
+	buffer[2].TexCoord = { 10.0f,0.0f };
+	buffer[3].TexCoord = { 10.0f,10.0f };
 
 	m_VertexBuffer->Unmap(0, nullptr);
 
 	// テクスチャ読み込み
-	m_Texture.Load("asset/paimeng.jpg");
+	m_Texture.Load("asset/field004.tga");
 }
 
-void CPolygon::Update()
+void CField::Update()
 {
-	//static float pos = 0.0f;
-	//pos += 0.5f;
-	//Vertex3D* buffer{};
-	//m_VertexBuffer->Map(0, nullptr, (void**)&buffer);
-
-	//buffer[0].Position = { pos,0.0f,0.0f };
-	//buffer[1].Position = { pos + 100.0f,0.0f,0.0f };
-	//buffer[2].Position = { pos,100.0f,0.0f };
-	//buffer[3].Position = { pos + 100.0f,100.0f,0.0f };
-	//buffer[0].Normal = { 0.0f,1.0f,0.0f };
-	//buffer[1].Normal = { 0.0f,1.0f,0.0f };
-	//buffer[2].Normal = { 0.0f,1.0f,0.0f };
-	//buffer[3].Normal = { 0.0f,1.0f,0.0f };
-	//buffer[0].TexCoord = { 0.0f,0.0f };
-	//buffer[1].TexCoord = { 1.0f,0.0f };
-	//buffer[2].TexCoord = { 0.0f,1.0f };
-	//buffer[3].TexCoord = { 1.0f,1.0f };
-
-	//m_VertexBuffer->Unmap(0, nullptr);
 }
 
-void CPolygon::Draw(ID3D12GraphicsCommandList* CommandList)
+void CField::Draw(ID3D12GraphicsCommandList* CommandList)
 {
 	HRESULT hr;
 
 	//マトリクス設定
-	XMMATRIX view = XMMatrixIdentity();
-	XMMATRIX projection = XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
+	XMMATRIX view = XMMatrixLookAtLH({ 0.0,2.0,-5.0 }, { 0.0,0.0,0.0 }, { 0.0,1.0,0.0 });
+	XMMATRIX projection = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 20.0f);
+
 	XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 
 	//定数バッファ設定

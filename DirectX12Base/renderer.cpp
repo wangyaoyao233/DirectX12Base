@@ -28,6 +28,7 @@ CRenderer::CRenderer()
 
 	Initialize();
 	m_Polygon = std::make_unique<CPolygon>();
+	m_Field = std::make_unique<CField>();
 }
 
 void CRenderer::Initialize()
@@ -380,6 +381,7 @@ void CRenderer::Draw()
 	m_GraphicsCommandList->OMSetRenderTargets(1, &m_RTHandle[m_RTIndex], TRUE, &m_DSHandle);
 
 	//オブジェクト描画
+	m_Field->Draw(m_GraphicsCommandList.Get());
 	m_Polygon->Draw(m_GraphicsCommandList.Get());
 
 	//プレゼント用リソースバリア
