@@ -92,8 +92,10 @@ void CPolygon::Draw(ID3D12GraphicsCommandList* CommandList)
 	HRESULT hr;
 
 	//マトリクス設定
-	XMMATRIX view = XMMatrixIdentity();
-	XMMATRIX projection = XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
+	//XMMATRIX view = XMMatrixIdentity();
+	//XMMATRIX projection = XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
+	XMMATRIX view = CRenderer::GetInstance()->GetCamera2D()->GetViewMatrix();
+	XMMATRIX projection = CRenderer::GetInstance()->GetCamera2D()->GetProjectionMatrix();
 	XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 
 	//定数バッファ設定

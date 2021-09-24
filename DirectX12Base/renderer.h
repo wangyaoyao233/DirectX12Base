@@ -5,6 +5,8 @@ using namespace Microsoft::WRL;
 
 #include "polygon.h"
 #include "field.h"
+#include "camera_2d.h"
+#include "camera_3d.h"
 
 struct Vertex3D
 {
@@ -57,6 +59,9 @@ private:
 	std::unique_ptr<CPolygon>			m_Polygon;
 	std::unique_ptr<CField>				m_Field;
 
+	std::unique_ptr<CCamera2D>			m_Camera2D;
+	std::unique_ptr<CCamera3D>			m_Camera3D;
+
 public:
 
 	CRenderer();
@@ -68,4 +73,7 @@ public:
 
 	static CRenderer* GetInstance() { return m_Instance; }
 	ComPtr<ID3D12Device> GetDevice() { return m_Device; }
+
+	CCamera2D* GetCamera2D() { return m_Camera2D.get(); }
+	CCamera3D* GetCamera3D() { return m_Camera3D.get(); }
 };

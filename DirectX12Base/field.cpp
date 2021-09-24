@@ -73,8 +73,10 @@ void CField::Draw(ID3D12GraphicsCommandList* CommandList)
 	HRESULT hr;
 
 	//マトリクス設定
-	XMMATRIX view = XMMatrixLookAtLH({ 0.0,2.0,-5.0 }, { 0.0,0.0,0.0 }, { 0.0,1.0,0.0 });
-	XMMATRIX projection = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 20.0f);
+	//XMMATRIX view = XMMatrixLookAtLH({ 0.0,2.0,-5.0 }, { 0.0,0.0,0.0 }, { 0.0,1.0,0.0 });
+	//XMMATRIX projection = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 20.0f);
+	XMMATRIX view = CRenderer::GetInstance()->GetCamera3D()->GetViewMatrix();
+	XMMATRIX projection = CRenderer::GetInstance()->GetCamera3D()->GetProjectionMatrix();
 
 	XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 

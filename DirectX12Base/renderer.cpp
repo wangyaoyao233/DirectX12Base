@@ -29,6 +29,9 @@ CRenderer::CRenderer()
 	Initialize();
 	m_Polygon = std::make_unique<CPolygon>();
 	m_Field = std::make_unique<CField>();
+
+	m_Camera2D = std::make_unique<CCamera2D>();
+	m_Camera3D = std::make_unique<CCamera3D>();
 }
 
 void CRenderer::Initialize()
@@ -352,6 +355,8 @@ void CRenderer::Initialize()
 void CRenderer::Update()
 {
 	m_Polygon->Update();
+	m_Camera3D->Update();
+	m_Camera2D->Update();
 }
 
 void CRenderer::Draw()
@@ -381,7 +386,9 @@ void CRenderer::Draw()
 	m_GraphicsCommandList->OMSetRenderTargets(1, &m_RTHandle[m_RTIndex], TRUE, &m_DSHandle);
 
 	//オブジェクト描画
+	m_Camera3D->Draw();
 	m_Field->Draw(m_GraphicsCommandList.Get());
+	m_Camera2D->Draw();
 	m_Polygon->Draw(m_GraphicsCommandList.Get());
 
 	//プレゼント用リソースバリア
