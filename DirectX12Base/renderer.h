@@ -5,6 +5,7 @@ using namespace Microsoft::WRL;
 
 #include "polygon.h"
 #include "field.h"
+#include "cube.h"
 #include "camera_2d.h"
 #include "camera_3d.h"
 
@@ -58,6 +59,7 @@ private:
 
 	std::unique_ptr<CPolygon>			m_Polygon;
 	std::unique_ptr<CField>				m_Field;
+	std::unique_ptr<CCube>				m_Cube;
 
 	std::unique_ptr<CCamera2D>			m_Camera2D;
 	std::unique_ptr<CCamera3D>			m_Camera3D;

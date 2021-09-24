@@ -142,6 +142,7 @@
     <ClCompile Include="camera_2d.cpp" />
     <ClCompile Include="camera_3d.cpp" />
     <ClCompile Include="camera_base.cpp" />
+    <ClCompile Include="cube.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="polygon.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="camera_2d.h" />
     <ClInclude Include="camera_3d.h" />
     <ClInclude Include="camera_base.h" />
+    <ClInclude Include="cube.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="polygon.h" />

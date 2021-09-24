@@ -14,5 +14,17 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-    return input.Diffuse * texture0.Sample(sampler0, input.TexCoord);
+    float4 tex0Color = texture0.Sample(sampler0, input.TexCoord);
+    
+    float3 normal = normalize(input.Normal.xyz);
+    
+    float3 lightDir = normalize(float3(1, -1, 1));
+    
+    float NDotL = saturate(dot(normal, -lightDir));//ランバート拡散
+    
+    float4 outDiffuse;  
+    outDiffuse = input.Diffuse * tex0Color * NDotL;
+    
+    
+    return outDiffuse;
 }
