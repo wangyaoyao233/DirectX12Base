@@ -8,6 +8,7 @@ using namespace Microsoft::WRL;
 #include "cube.h"
 #include "camera_2d.h"
 #include "camera_3d.h"
+#include "light.h"
 
 struct Vertex3D
 {
@@ -20,6 +21,8 @@ struct Constant
 {
 	XMFLOAT4X4 WVP;
 	XMFLOAT4X4 World;
+	XMFLOAT4 LightDirection;
+	XMFLOAT4 CameraPostion;
 };
 
 class CRenderer
@@ -64,6 +67,8 @@ private:
 	std::unique_ptr<CCamera2D>			m_Camera2D;
 	std::unique_ptr<CCamera3D>			m_Camera3D;
 
+	std::unique_ptr<CLight>				m_Light;
+
 public:
 
 	CRenderer();
@@ -78,4 +83,5 @@ public:
 
 	CCamera2D* GetCamera2D() { return m_Camera2D.get(); }
 	CCamera3D* GetCamera3D() { return m_Camera3D.get(); }
+	CLight* GetLight() { return m_Light.get(); }
 };

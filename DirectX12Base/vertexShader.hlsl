@@ -2,6 +2,8 @@ cbuffer cbTansMatrix : register(b0)
 {
     float4x4 WVP;
     float4x4 World;
+    float4 LightDirection;
+    float4 CameraPostion;
 };
 
 
@@ -15,6 +17,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
     float4 Position : SV_POSITION;
+    float4 WorldPostion : POSITION0;
     float4 Normal   : NORMAL;
     float2 TexCoord : TEXCOORD;
     float4 Diffuse  : COLOR;
@@ -27,6 +30,8 @@ PS_INPUT main(VS_INPUT input)
       
     float4 position = float4(input.Position, 1.0f);
     output.Position = mul(position, WVP);
+    
+    output.WorldPostion = mul(position, World);
     
     float4 normal = float4(input.Normal, 0.0f);
     output.Normal = mul(normal, World);

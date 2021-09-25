@@ -13,4 +13,6 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+
+	XMFLOAT3 GetCameraPostion() { return m_EyePos; }
 };

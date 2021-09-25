@@ -33,6 +33,8 @@ CRenderer::CRenderer()
 
 	m_Camera2D = std::make_unique<CCamera2D>();
 	m_Camera3D = std::make_unique<CCamera3D>();
+
+	m_Light = std::make_unique<CLight>();
 }
 
 void CRenderer::Initialize()
@@ -356,9 +358,11 @@ void CRenderer::Initialize()
 void CRenderer::Update()
 {
 	m_Polygon->Update();
+	m_Field->Update();
 	m_Cube->Update();
 	m_Camera3D->Update();
 	m_Camera2D->Update();
+	m_Light->Update();
 }
 
 void CRenderer::Draw()
@@ -390,9 +394,10 @@ void CRenderer::Draw()
 	//オブジェクト描画
 	m_Camera3D->Draw();
 	m_Field->Draw(m_GraphicsCommandList.Get());
+	m_Cube->Draw(m_GraphicsCommandList.Get());
+
 	m_Camera2D->Draw();
 	m_Polygon->Draw(m_GraphicsCommandList.Get());
-	m_Cube->Draw(m_GraphicsCommandList.Get());
 
 	//プレゼント用リソースバリア
 	SetResourceBarrier(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
