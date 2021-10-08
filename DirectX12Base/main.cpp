@@ -1,3 +1,6 @@
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx12.h"
 #include "main.h"
 #include "renderer.h"
 
@@ -54,6 +57,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	// レンダラー初期化
 	CRenderer renderer;
+
+	// Setup Imgui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+	//ImGui::StyleColorsDark();
+	ImGui::StyleColorsClassic();
+
+	ImGui_ImplWin32_Init(g_Window);
+	// ImGui_ImplDX12_Init(renderer.GetDevice().Get(), 3, DXGI_FORMAT_R8G8B8A8_UNORM, );
 
 	//フレームカウント初期化
 	DWORD dwExecLastTime;
