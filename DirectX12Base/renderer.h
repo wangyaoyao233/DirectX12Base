@@ -4,6 +4,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 #include "polygon.h"
+#include "polygon_deferred.h"
 #include "field.h"
 #include "cube.h"
 #include "camera_2d.h"
@@ -60,6 +61,13 @@ private:
 	D3D12_RECT							m_ScissorRect;
 	D3D12_VIEWPORT						m_Viewport;
 
+	//Deferred Render
+	ComPtr<ID3D12Resource>				m_NormalResource;
+	ComPtr<ID3D12Resource>				m_DiffuseResource;
+	D3D12_CPU_DESCRIPTOR_HANDLE			m_RTHandleGeometry[2];
+	ComPtr<ID3D12DescriptorHeap>		m_RTVDescriptorHeap;
+	ComPtr<ID3D12DescriptorHeap>		m_SRVDescriptorHeap;
+
 	std::unique_ptr<CPolygon>			m_Polygon;
 	std::unique_ptr<CField>				m_Field;
 	std::unique_ptr<CCube>				m_Cube;
@@ -69,6 +77,8 @@ private:
 
 	std::unique_ptr<CLight>				m_Light;
 
+	std::unique_ptr<CPolygonDeferred>	m_PolygonDeferred;
+
 public:
 
 	CRenderer();
@@ -76,7 +86,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
-	void SetResourceBarrier(D3D12_RESOURCE_STATES BeforeState, D3D12_RESOURCE_STATES AfterState);
+	void SetResourceBarrier(ID3D12Resource* Resource, D3D12_RESOURCE_STATES BeforeState, D3D12_RESOURCE_STATES AfterState);
 
 	static CRenderer* GetInstance() { return m_Instance; }
 	ComPtr<ID3D12Device> GetDevice() { return m_Device; }
