@@ -36,7 +36,7 @@ void CPolygon::Initialize()
 	assert(SUCCEEDED(hr));
 
 	// 定数バッファの作成
-	resourceDesc.Width = sizeof(Constant);//定数バッファは256byteアライン
+	resourceDesc.Width = 256;//定数バッファは256byteアライン
 	hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_ConstantBuffer));
 	assert(SUCCEEDED(hr));
 
@@ -91,8 +91,9 @@ void CPolygon::Draw(ID3D12GraphicsCommandList* CommandList)
 	constant->World = matrix;
 
 	//TODO: 改用2d专用的shader, 不需要光照相关处理
-	constant->LightDirection = { 0, -1, 0, 0 };
-	constant->CameraPostion = { 0,0,0,0 };
+	//Light
+	//constant->LightDirection = { 0, -1, 0, 0 };
+	//constant->CameraPostion = { 0,0,0,0 };
 
 	m_ConstantBuffer->Unmap(0, nullptr);
 

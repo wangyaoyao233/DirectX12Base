@@ -18,5 +18,5 @@ public:
 
 	void Initialize();
 	void Update();
-	void Draw(ID3D12GraphicsCommandList* CommandList, ID3D12DescriptorHeap* DescriptorHeap);
+	void Draw(ID3D12GraphicsCommandList* CommandList, ID3D12DescriptorHeap* Texture);
 };

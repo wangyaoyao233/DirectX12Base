@@ -1,13 +1,15 @@
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx12.h"
+
+
 #include "main.h"
 #include "renderer.h"
+
 
 const char* CLASS_NAME = "DX12AppClass";
 const char* WINDOW_NAME = "DirectX12";
 
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 
 HWND g_Window;
 
@@ -15,6 +17,7 @@ HWND GetWindow()
 {
 	return g_Window;
 }
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -34,10 +37,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		NULL
 	};
 
-	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®ç™»éŒ²
+	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ì“o˜^
 	RegisterClassEx(&wcex);
 
-	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
+	// ƒEƒBƒ“ƒhƒE‚Ìì¬
 	g_Window = CreateWindowEx(0,
 		CLASS_NAME,
 		WINDOW_NAME,
@@ -51,46 +54,39 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		hInstance,
 		NULL);
 
-	// ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤º(åˆæœŸåŒ–å‡¦ç†ã®å¾Œã«è¡Œã†)
+
+
+	// ƒEƒCƒ“ƒhƒE‚Ì•\¦(‰Šú‰»ˆ—‚ÌŒã‚És‚¤)
 	ShowWindow(g_Window, nCmdShow);
 	UpdateWindow(g_Window);
 
-	// ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼åˆæœŸåŒ–
+
+	// ƒŒƒ“ƒ_ƒ‰[‰Šú‰»
 	CRenderer renderer;
 
-	// Setup Imgui
-	//IMGUI_CHECKVERSION();
-	//ImGui::CreateContext();
-	//ImGuiIO io = ImGui::GetIO(); (void)io;
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-	////ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
 
-	//ImGui_ImplWin32_Init(g_Window);
-	//// ImGui_ImplDX12_Init(renderer.GetDevice().Get(), 3, DXGI_FORMAT_R8G8B8A8_UNORM, );
-
-	//ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ãƒˆåˆæœŸåŒ–
+	//ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg‰Šú‰»
 	DWORD dwExecLastTime;
 	DWORD dwCurrentTime;
 	timeBeginPeriod(1);
 	dwExecLastTime = timeGetTime();
 	dwCurrentTime = 0;
 
-	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—
+
+	// ƒƒbƒZ[ƒWƒ‹[ƒv
 	MSG msg;
 	while (1)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
-			{// PostQuitMessage()ãŒå‘¼ã°ã‚ŒãŸã‚‰ãƒ«ãƒ¼ãƒ—çµ‚äº†
+			{// PostQuitMessage()‚ªŒÄ‚Î‚ê‚½‚çƒ‹[ƒvI—¹
 				break;
 			}
 			else
 			{
-				// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ç¿»è¨³ã¨ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒ
+				// ƒƒbƒZ[ƒW‚Ì–|–ó‚ÆƒfƒBƒXƒpƒbƒ`
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
@@ -103,25 +99,28 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			{
 				dwExecLastTime = dwCurrentTime;
 
-				// æ›´æ–°å‡¦ç†
+				// XVˆ—
 				renderer.Update();
 
-				// æç”»å‡¦ç†
+				// •`‰æˆ—
 				renderer.Draw();
 			}
 		}
 	}
 
-	timeEndPeriod(1);				// åˆ†è§£èƒ½ã‚’æˆ»ã™
+	timeEndPeriod(1);				// •ª‰ğ”\‚ğ–ß‚·
 
-	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®ç™»éŒ²ã‚’è§£é™¤
+	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ì“o˜^‚ğ‰ğœ
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
+
 
 	return (int)msg.wParam;
 }
 
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+
 	switch (uMsg)
 	{
 	case WM_DESTROY:
@@ -143,3 +142,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+

@@ -27,8 +27,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     float3 normal = normalize(input.Normal.xyz);
     
-    //float3 lightDir = normalize(float3(1, -1, 1));
-    float3 lightDir = normalize(LightDirection.xyz);
+    float3 lightDir = normalize(float3(1, -1, 1));
+    //float3 lightDir = normalize(LightDirection.xyz);
     
     float NDotL = saturate(-dot(normal, lightDir));//ランバート拡散
     
@@ -36,7 +36,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     outDiffuse = input.Diffuse * tex0Color * NDotL;
     
     // specular
-    float3 eyev = normalize(input.WorldPostion.xyz - CameraPostion.xyz);
+    //float3 eyev = normalize(input.WorldPostion.xyz - CameraPostion.xyz);
+    float3 eyev = normalize(input.WorldPostion.xyz - float3(0,0,0));
     float3 refv = normalize(reflect(lightDir, normal));   
     float spec = saturate(-dot(eyev, refv));
     spec = pow(spec, 30);  

@@ -22,13 +22,14 @@ struct Constant
 {
 	XMFLOAT4X4 WVP;
 	XMFLOAT4X4 World;
-	XMFLOAT4 LightDirection;
-	XMFLOAT4 CameraPostion;
+	//XMFLOAT4 LightDirection;
+	//XMFLOAT4 CameraPostion;
 };
 
 class CRenderer
 {
 private:
+	static const int NUM_GBUFFER = 2;
 
 	static CRenderer* m_Instance;
 
@@ -55,7 +56,10 @@ private:
 	ComPtr<ID3D12DescriptorHeap>		m_DHDS;
 	D3D12_CPU_DESCRIPTOR_HANDLE			m_DSHandle;
 
-	ComPtr<ID3D12PipelineState>			m_PiplineState;
+	//ComPtr<ID3D12PipelineState>			m_PiplineState;
+	ComPtr<ID3D12PipelineState>			m_PipelineStateGeometry;
+	ComPtr<ID3D12PipelineState>			m_PipelineStateLight;
+
 	ComPtr<ID3D12RootSignature>			m_RootSignature;
 
 	D3D12_RECT							m_ScissorRect;
@@ -64,7 +68,9 @@ private:
 	//Deferred Render
 	ComPtr<ID3D12Resource>				m_NormalResource;
 	ComPtr<ID3D12Resource>				m_DiffuseResource;
-	D3D12_CPU_DESCRIPTOR_HANDLE			m_RTHandleGeometry[2];
+	ComPtr<ID3D12Resource>				m_PositionResource;
+	ComPtr<ID3D12Resource>				m_DepthResource;
+	D3D12_CPU_DESCRIPTOR_HANDLE			m_RTHandleGeometry[NUM_GBUFFER];
 	ComPtr<ID3D12DescriptorHeap>		m_RTVDescriptorHeap;
 	ComPtr<ID3D12DescriptorHeap>		m_SRVDescriptorHeap;
 
@@ -75,7 +81,7 @@ private:
 	std::unique_ptr<CCamera2D>			m_Camera2D;
 	std::unique_ptr<CCamera3D>			m_Camera3D;
 
-	std::unique_ptr<CLight>				m_Light;
+	//std::unique_ptr<CLight>				m_Light;
 
 	std::unique_ptr<CPolygonDeferred>	m_PolygonDeferred;
 
@@ -93,5 +99,5 @@ public:
 
 	CCamera2D* GetCamera2D() { return m_Camera2D.get(); }
 	CCamera3D* GetCamera3D() { return m_Camera3D.get(); }
-	CLight* GetLight() { return m_Light.get(); }
+	//CLight* GetLight() { return m_Light.get(); }
 };

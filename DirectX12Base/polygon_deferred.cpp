@@ -36,7 +36,7 @@ void CPolygonDeferred::Initialize()
 	assert(SUCCEEDED(hr));
 
 	// 定数バッファの作成
-	resourceDesc.Width = sizeof(Constant);//定数バッファは256byteアライン
+	resourceDesc.Width = 256;//定数バッファは256byteアライン
 	hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_ConstantBuffer));
 	assert(SUCCEEDED(hr));
 
@@ -60,21 +60,23 @@ void CPolygonDeferred::Initialize()
 
 	m_VertexBuffer->Unmap(0, nullptr);
 
-	// テクスチャ読み込み
-	m_Texture.Load("asset/paimeng.jpg");
+	m_Texture.Load("asset/field004.tga");
 }
 
 void CPolygonDeferred::Update()
 {
 }
 
-void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12DescriptorHeap* DescriptorHeap)
+void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12DescriptorHeap* Texture)
 {
 	HRESULT hr;
 
 	//マトリクス設定
+	//XMMATRIX view = XMMatrixIdentity();
+	//XMMATRIX projection = XMMatrixOrthographicOffCenterLH(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
 	XMMATRIX view = CRenderer::GetInstance()->GetCamera2D()->GetViewMatrix();
 	XMMATRIX projection = CRenderer::GetInstance()->GetCamera2D()->GetProjectionMatrix();
+
 	XMMATRIX world = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 
 	//定数バッファ設定
@@ -89,8 +91,9 @@ void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12Descri
 	constant->World = matrix;
 
 	//TODO: 改用2d专用的shader, 不需要光照相关处理
-	constant->LightDirection = { 0, -1, 0, 0 };
-	constant->CameraPostion = { 0,0,0,0 };
+	//Light
+	//constant->LightDirection = { 0, -1, 0, 0 };
+	//constant->CameraPostion = { 0,0,0,0 };
 
 	m_ConstantBuffer->Unmap(0, nullptr);
 
@@ -104,9 +107,13 @@ void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12Descri
 	CommandList->IASetVertexBuffers(0, 1, &vertexView);
 
 	//テクスチャ設定
-	ID3D12DescriptorHeap* dh[] = { *m_Texture.GetDescriptorHeap().GetAddressOf() };
+	ID3D12DescriptorHeap* dh[] = { Texture };
 	CommandList->SetDescriptorHeaps(_countof(dh), dh);
-	CommandList->SetGraphicsRootDescriptorTable(1, m_Texture.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+	CommandList->SetGraphicsRootDescriptorTable(1, Texture->GetGPUDescriptorHandleForHeapStart());
+
+	//ID3D12DescriptorHeap* dh[] = { *m_Texture.GetDescriptorHeap().GetAddressOf() };
+	//CommandList->SetDescriptorHeaps(_countof(dh), dh);
+	//CommandList->SetGraphicsRootDescriptorTable(1, m_Texture.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	//トボロジ設定
 	CommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
