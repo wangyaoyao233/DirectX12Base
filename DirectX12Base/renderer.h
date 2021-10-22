@@ -29,7 +29,7 @@ struct Constant
 class CRenderer
 {
 private:
-	static const int NUM_GBUFFER = 2;
+	static const int NUM_GBUFFER = 4;
 
 	static CRenderer* m_Instance;
 
