@@ -9,6 +9,7 @@ struct PS_INPUT
     float4 Normal : NORMAL;
     float2 TexCoord : TEXCOORD;
     float4 Diffuse : COLOR;
+    float4 Depth : DEPTH;
 };
 
 struct PS_OUTPUT
@@ -28,9 +29,12 @@ PS_OUTPUT main(PS_INPUT input)
     output.Diffuse = texture0.Sample(sampler0, input.TexCoord);   
     output.WorldPosition = input.WorldPosition;
         
-    //we get the depth value for this pixel, note that it is stored as z/w so we perform the necessary division to get the depth.
+    // we get the depth value for this pixel, note that it is stored as z/w so we perform the necessary division to get the depth.
 	// Get the depth value of the pixel by dividing the Z pixel depth by the homogeneous W coordinate.
-    output.Depth = input.Position.z / input.Position.w;
+    //http://www.rastertek.com/dx11tut35.html
+    //output.Depth = input.Position.z / input.Position.w;
+    
+    output.Depth = input.Depth;
        
     return output;
 }

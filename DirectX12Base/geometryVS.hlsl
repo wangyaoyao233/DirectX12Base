@@ -21,6 +21,7 @@ struct PS_INPUT
     float4 Normal : NORMAL;
     float2 TexCoord : TEXCOORD;
     float4 Diffuse : COLOR;
+    float4 Depth : DEPTH;
 };
 
 
@@ -32,6 +33,7 @@ PS_INPUT main(VS_INPUT input)
     output.Position = mul(position, WVP);
     
     output.WorldPosition = mul(position, World);
+    output.Depth = output.Position.z;
     
     float4 normal = float4(input.Normal, 0.0f);
     output.Normal = mul(normal, World);
