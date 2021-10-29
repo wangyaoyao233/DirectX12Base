@@ -44,6 +44,12 @@ float4 main(PS_INPUT input) : SV_TARGET
     spec = pow(spec, 30);
     outDiffuse.rgb += spec;
       
+    // fog
+    float4 fogColor = float4(0, 0, 0, 1);
+    float4 finalColor;
+    finalColor.rgb = lerp(outDiffuse.rgb, fogColor.rgb, depth.x / 15);
+    finalColor.a = outDiffuse.a;
     
-    return outDiffuse;
+    
+    return finalColor;
 }
