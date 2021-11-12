@@ -3,7 +3,7 @@ Texture2D<float4> normalTex : register(t0);
 Texture2D<float4> colorTex : register(t1);
 Texture2D<float4> worldPosTex : register(t2);
 Texture2D<float4> depthTex : register(t3);
-
+Texture2D<float4> envTex : register(t4);
 
 SamplerState sampler0 : register(s0);
 
@@ -36,14 +36,24 @@ float4 main(PS_INPUT input) : SV_TARGET
     //// specular
     float3 cameraPos = float3(0, 2, -5);
     float3 eyev = normalize(worldPos.xyz - cameraPos);
-    float3 refv = normalize(reflect(lightDir, normal.xyz));
-    float spec = saturate(-dot(eyev, refv));
+    float3 lightRefV = normalize(reflect(lightDir, normal.xyz));
+    float spec = saturate(-dot(eyev, lightRefV));
     spec = pow(spec, 30);
     outDiffuse.rgb += spec;
       
     //// depth fog
-    float3 fogColor = float3(0, 0, 0);
-    outDiffuse.rgb = lerp(outDiffuse.rgb, fogColor.rgb, depth.x / 15);
+    //float3 fogColor = float3(0, 0, 0);
+    //outDiffuse.rgb = lerp(outDiffuse.rgb, fogColor.rgb, depth.x / 15);
+    
+    //// 環境マッピング
+    float3 eyeRefV = normalize(reflect(eyev, normal.xyz));
+    
+    float2 envTexCoord;
+    float PI = 3.141592653589;
+    envTexCoord.x = atan2(eyeRefV.x, eyeRefV.z) / (PI * 2) + 0.5;
+    envTexCoord.y = acos(eyeRefV.y) / PI;
+    
+    outDiffuse.rgb += envTex.Sample(sampler0, envTexCoord) * 0.5;
     
     
     return outDiffuse;
