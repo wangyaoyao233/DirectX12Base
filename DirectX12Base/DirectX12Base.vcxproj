@@ -153,6 +153,8 @@
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="polygon_deferred.cpp" />
     <ClCompile Include="renderer.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="polygon_deferred.h" />
     <ClInclude Include="renderer.h" />

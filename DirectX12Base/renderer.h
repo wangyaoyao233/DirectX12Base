@@ -10,6 +10,7 @@ using namespace Microsoft::WRL;
 #include "camera_2d.h"
 #include "camera_3d.h"
 #include "light.h"
+#include "player.h"
 
 struct Vertex3D
 {
@@ -25,6 +26,8 @@ struct Constant
 	//XMFLOAT4 LightDirection;
 	//XMFLOAT4 CameraPostion;
 };
+
+class CPlayer;
 
 class CRenderer
 {
@@ -88,6 +91,8 @@ private:
 	//std::unique_ptr<CLight>				m_Light;
 
 	std::unique_ptr<CPolygonDeferred>	m_PolygonDeferred;
+
+	std::unique_ptr<CPlayer>			m_Player;
 
 public:
 

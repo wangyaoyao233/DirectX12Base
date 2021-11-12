@@ -37,6 +37,8 @@ CRenderer::CRenderer()
 	//m_Light = std::make_unique<CLight>();
 
 	m_PolygonDeferred = std::make_unique<CPolygonDeferred>();
+
+	m_Player = std::make_unique<CPlayer>();
 }
 
 void CRenderer::Initialize()
@@ -754,6 +756,8 @@ void CRenderer::Update()
 	m_Camera3D->Update();
 	m_Camera2D->Update();
 	//m_Light->Update();
+
+	m_Player->Update();
 }
 
 void CRenderer::Draw()
@@ -790,7 +794,8 @@ void CRenderer::Draw()
 		//オブジェクト描画
 		m_Camera3D->Draw();
 		m_Field->Draw(m_GraphicsCommandList.Get());
-		m_Cube->Draw(m_GraphicsCommandList.Get());
+		//m_Cube->Draw(m_GraphicsCommandList.Get());
+		m_Player->Draw(m_GraphicsCommandList.Get());
 
 		m_Camera2D->Draw();
 		m_Polygon->Draw(m_GraphicsCommandList.Get());
