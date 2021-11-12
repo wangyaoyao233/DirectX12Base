@@ -251,6 +251,77 @@ void CRenderer::Initialize()
 		assert(SUCCEEDED(hr));
 	}
 
+	// IBLマップ読み込み
+	{
+		unsigned char header[18];
+		std::vector<char> image;
+		unsigned int width, height;
+		unsigned char depth;
+		unsigned int bpp;
+		unsigned int size;
+
+		std::ifstream file("asset/ibl.tga", std::ios_base::in |
+			std::ios_base::binary);
+		assert(file);
+
+		// ヘッダ読み込み
+		file.read((char*)header, sizeof(header));
+
+		// 画像サイズ取得
+		width = header[13] * 256 + header[12];
+		height = header[15] * 256 + header[14];
+		depth = header[16];
+
+		if (depth == 32)
+			bpp = 4;
+		else if (depth == 24)
+			bpp = 3;
+		else
+			bpp = 0;
+
+		if (bpp != 4) {
+			assert(false);
+		}
+		size = width * height * bpp;
+
+		// メモリ確保
+		image.resize(size);
+		// 画像読み込み
+		file.read(&image[0], size);
+
+		file.close();
+
+		//リソース作成
+		D3D12_HEAP_PROPERTIES heapProperties{};
+		heapProperties.CreationNodeMask = 0;
+		heapProperties.VisibleNodeMask = 0;
+		heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
+		heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+		heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+
+		D3D12_RESOURCE_DESC   resourceDesc{};
+		resourceDesc.DepthOrArraySize = 1;
+		resourceDesc.MipLevels = 1;
+		resourceDesc.SampleDesc.Count = 1;
+		resourceDesc.SampleDesc.Quality = 0;
+		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		resourceDesc.Width = width;
+		resourceDesc.Height = height;
+		resourceDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+
+		hr = m_Device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
+			&resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+			IID_PPV_ARGS(&m_IBLResource));
+		assert(SUCCEEDED(hr));
+
+		//画像データ書込
+		D3D12_BOX box = { 0, 0, 0, (UINT)width, (UINT)height, 1 };
+		hr = m_IBLResource->WriteToSubresource(0, &box, &image[0],
+			4 * width, 4 * width * height);
+		assert(SUCCEEDED(hr));
+	}
+
 	//ジオメトリバッファ生成
 	{
 		//リソース生成
@@ -334,7 +405,7 @@ void CRenderer::Initialize()
 		{
 			//SRVデスクリプタヒープ
 			D3D12_DESCRIPTOR_HEAP_DESC desc;
-			desc.NumDescriptors = NUM_GBUFFER + 1;// + envMap
+			desc.NumDescriptors = NUM_GBUFFER + 2;// + envMap + IBL
 			desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 			desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			desc.NodeMask = 0;
@@ -369,6 +440,10 @@ void CRenderer::Initialize()
 			handle.ptr += size;
 			srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 			m_Device->CreateShaderResourceView(m_EnvResource.Get(), &srvDesc, handle);
+
+			handle.ptr += size;
+			srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			m_Device->CreateShaderResourceView(m_IBLResource.Get(), &srvDesc, handle);
 		}
 	}
 
@@ -392,7 +467,7 @@ void CRenderer::Initialize()
 		rootParameters[0].Descriptor.RegisterSpace = 0;
 
 		D3D12_DESCRIPTOR_RANGE range[1]{};
-		range[0].NumDescriptors = NUM_GBUFFER + 1;// + envMap
+		range[0].NumDescriptors = NUM_GBUFFER + 2;// + envMap + IBL
 		range[0].BaseShaderRegister = 0;
 		range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 		range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;

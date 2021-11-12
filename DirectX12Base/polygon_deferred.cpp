@@ -45,10 +45,10 @@ void CPolygonDeferred::Initialize()
 	hr = m_VertexBuffer->Map(0, nullptr, (void**)&buffer);
 	assert(SUCCEEDED(hr));
 
-	buffer[0].Position = { 300.0f,0.0f,0.0f };
-	buffer[1].Position = { 700.0f,0.0f,0.0f };
-	buffer[2].Position = { 300.0f,300.0f,0.0f };
-	buffer[3].Position = { 700.0f,300.0f,0.0f };
+	buffer[0].Position = { 0.0f,0.0f,0.0f };
+	buffer[1].Position = { SCREEN_WIDTH,0.0f,0.0f };
+	buffer[2].Position = { 0.0f,SCREEN_HEIGHT,0.0f };
+	buffer[3].Position = { SCREEN_WIDTH,SCREEN_HEIGHT,0.0f };
 	buffer[0].Normal = { 0.0f,1.0f,0.0f };
 	buffer[1].Normal = { 0.0f,1.0f,0.0f };
 	buffer[2].Normal = { 0.0f,1.0f,0.0f };

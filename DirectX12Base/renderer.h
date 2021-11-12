@@ -75,6 +75,8 @@ private:
 	ComPtr<ID3D12DescriptorHeap>		m_SRVDescriptorHeap;
 
 	ComPtr<ID3D12Resource>				m_EnvResource;// env texture
+	ComPtr<ID3D12Resource>				m_IBLResource;// IBL texture
+
 
 	std::unique_ptr<CPolygon>			m_Polygon;
 	std::unique_ptr<CField>				m_Field;
