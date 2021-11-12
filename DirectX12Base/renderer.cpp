@@ -334,7 +334,7 @@ void CRenderer::Initialize()
 		{
 			//SRVデスクリプタヒープ
 			D3D12_DESCRIPTOR_HEAP_DESC desc;
-			desc.NumDescriptors = NUM_GBUFFER + 1;
+			desc.NumDescriptors = NUM_GBUFFER + 1;// + envMap
 			desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 			desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			desc.NodeMask = 0;
@@ -392,7 +392,7 @@ void CRenderer::Initialize()
 		rootParameters[0].Descriptor.RegisterSpace = 0;
 
 		D3D12_DESCRIPTOR_RANGE range[1]{};
-		range[0].NumDescriptors = NUM_GBUFFER + 1;
+		range[0].NumDescriptors = NUM_GBUFFER + 1;// + envMap
 		range[0].BaseShaderRegister = 0;
 		range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 		range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;

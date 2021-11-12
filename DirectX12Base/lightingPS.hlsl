@@ -47,13 +47,17 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     //// 環境マッピング
     float3 eyeRefV = normalize(reflect(eyev, normal.xyz));
+
+    //フレネル反射率
+    float f0 = 0.0;
+    float f = f0 + (1.0 - f0) * pow(1.0 - dot(normal.xyz, eyeRefV.xyz), 5);
     
     float2 envTexCoord;
     float PI = 3.141592653589;
     envTexCoord.x = atan2(eyeRefV.x, eyeRefV.z) / (PI * 2) + 0.5;
     envTexCoord.y = acos(eyeRefV.y) / PI;
     
-    outDiffuse.rgb += envTex.Sample(sampler0, envTexCoord) * 0.5;
+    outDiffuse.rgb += envTex.Sample(sampler0, envTexCoord).rgb * f;
     
     
     return outDiffuse;
