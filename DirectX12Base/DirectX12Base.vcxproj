@@ -143,6 +143,7 @@
     <ClCompile Include="camera_3d.cpp" />
     <ClCompile Include="camera_base.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="DDSTextureLoader12.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="polygon_deferred.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="sky.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,8 @@
     <ClInclude Include="camera_3d.h" />
     <ClInclude Include="camera_base.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="DDSTextureLoader12.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="polygon.h" />
     <ClInclude Include="polygon_deferred.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="sky.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

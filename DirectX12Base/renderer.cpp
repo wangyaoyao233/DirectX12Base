@@ -1,5 +1,6 @@
 #include "main.h"
 #include "renderer.h"
+#include "DDSTextureLoader12.h"
 
 CRenderer* CRenderer::m_Instance = nullptr;
 
@@ -184,6 +185,7 @@ void CRenderer::Initialize()
 
 	// 環境マップ読み込み
 	{
+		/*
 		unsigned char header[18];
 		std::vector<char> image;
 		unsigned int width, height;
@@ -251,6 +253,21 @@ void CRenderer::Initialize()
 		hr = m_EnvResource->WriteToSubresource(0, &box, &image[0],
 			4 * width, 4 * width * height);
 		assert(SUCCEEDED(hr));
+		*/
+
+		std::unique_ptr<uint8_t[]> ddsData;
+		std::vector<D3D12_SUBRESOURCE_DATA> subresourceData;
+		hr = LoadDDSTextureFromFile(m_Device.Get(), L"asset/envmap.dds", m_EnvResource.GetAddressOf(), ddsData, subresourceData);
+		assert(SUCCEEDED(hr));
+
+		for (int i = 0; i < subresourceData.size(); i++)
+		{
+			int width = subresourceData[i].RowPitch / 4;
+			int height = subresourceData[i].SlicePitch / subresourceData[i].RowPitch;
+			D3D12_BOX box = { 0, 0, 0, (UINT)width, (UINT)height, 1 };
+			hr = m_EnvResource->WriteToSubresource(i, &box, subresourceData[i].pData, subresourceData[i].RowPitch, subresourceData[i].SlicePitch);
+			assert(SUCCEEDED(hr));
+		}
 	}
 
 	// IBLマップ読み込み
@@ -441,10 +458,12 @@ void CRenderer::Initialize()
 
 			handle.ptr += size;
 			srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			srvDesc.Texture2D.MipLevels = 13;
 			m_Device->CreateShaderResourceView(m_EnvResource.Get(), &srvDesc, handle);
 
 			handle.ptr += size;
 			srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			srvDesc.Texture2D.MipLevels = 1;
 			m_Device->CreateShaderResourceView(m_IBLResource.Get(), &srvDesc, handle);
 		}
 	}

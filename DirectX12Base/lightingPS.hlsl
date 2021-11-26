@@ -55,13 +55,16 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     //// 環境マッピング
     //フレネル反射率
-    float f0 = 0.0;
+    float f0 = 0.1;
     float f = f0 + (1.0 - f0) * pow(1.0 - dot(normal.xyz, eyeRefV.xyz), 5);
     
     float2 envTexCoord;
     envTexCoord.x = atan2(eyeRefV.x, eyeRefV.z) / (PI * 2) + 0.5;
     envTexCoord.y = acos(eyeRefV.y) / PI;   
-    color.rgb += envTex.Sample(sampler0, envTexCoord).rgb * f;
+
+    //color.rgb += envTex.Sample(sampler0, envTexCoord).rgb * f; //auto
+    color.rgb += envTex.SampleBias(sampler0, envTexCoord, 3.0).rgb * f;
+    //color.rgb = envTex.SampleBias(sampler0, envTexCoord, 3.0).rgb; //test
     
     
     return color;
