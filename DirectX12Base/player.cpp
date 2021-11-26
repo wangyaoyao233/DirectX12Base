@@ -64,7 +64,7 @@ void CPlayer::Draw(ID3D12GraphicsCommandList* CommandList)
 	XMMATRIX world = XMMatrixIdentity();
 
 	world *= XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);
-	world *= XMMatrixTranslation(0.0f, 1.0f, 0.0f);
+	world *= XMMatrixTranslation(2.0f, 1.0f, 0.0f);
 
 	//定数バッファ設定
 	Constant* constant;

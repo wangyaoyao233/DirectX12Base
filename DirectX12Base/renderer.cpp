@@ -793,12 +793,12 @@ void CRenderer::Draw()
 
 		//オブジェクト描画
 		m_Camera3D->Draw();
-		m_Field->Draw(m_GraphicsCommandList.Get());
-		//m_Cube->Draw(m_GraphicsCommandList.Get());
+		//m_Field->Draw(m_GraphicsCommandList.Get());
+		m_Cube->Draw(m_GraphicsCommandList.Get());
 		m_Player->Draw(m_GraphicsCommandList.Get());
 
 		m_Camera2D->Draw();
-		m_Polygon->Draw(m_GraphicsCommandList.Get());
+		//m_Polygon->Draw(m_GraphicsCommandList.Get());
 
 		//シェーダーリソース用リソースバリア
 		SetResourceBarrier(m_NormalResource.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
