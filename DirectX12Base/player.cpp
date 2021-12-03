@@ -48,7 +48,6 @@ void CPlayer::Update()
 {
 	m_Rotation.x += 0.01;
 	m_Rotation.y += 0.01;
-	m_Rotation.z += 0.01;
 }
 
 void CPlayer::Draw(ID3D12GraphicsCommandList* CommandList)

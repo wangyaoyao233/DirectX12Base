@@ -69,7 +69,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	//ImGui::StyleColorsClassic();
 
 	//ImGui_ImplWin32_Init(g_Window);
-	//// ImGui_ImplDX12_Init(renderer.GetDevice().Get(), 3, DXGI_FORMAT_R8G8B8A8_UNORM, );
+	//ImGui_ImplDX12_Init(renderer.GetDevice().Get(), 3, DXGI_FORMAT_R8G8B8A8_UNORM,
+	//	renderer.GetDescriptorHeap().Get(),
+	//	renderer.GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
+	//	renderer.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	//フレームカウント初期化
 	DWORD dwExecLastTime;

@@ -168,7 +168,6 @@ void CCube::Update()
 {
 	m_Rotation.x += 0.01f;
 	m_Rotation.y += 0.01f;
-	m_Rotation.z += 0.01f;
 }
 
 void CCube::Draw(ID3D12GraphicsCommandList* CommandList)

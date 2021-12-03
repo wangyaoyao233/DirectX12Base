@@ -109,4 +109,6 @@ public:
 	CCamera2D* GetCamera2D() { return m_Camera2D.get(); }
 	CCamera3D* GetCamera3D() { return m_Camera3D.get(); }
 	//CLight* GetLight() { return m_Light.get(); }
+
+	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return m_DescriptorHeap; }
 };
