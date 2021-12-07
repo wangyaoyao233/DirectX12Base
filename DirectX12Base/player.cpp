@@ -39,7 +39,7 @@ void CPlayer::Initialize()
 	assert(SUCCEEDED(hr));
 
 	m_Model = std::make_unique<CModel>();
-	m_Model->Load("./asset/torus.obj");
+	m_Model->Load("./asset/cone.obj");
 
 	m_Rotation = { 0.0f,0.0f,0.0f };
 }
