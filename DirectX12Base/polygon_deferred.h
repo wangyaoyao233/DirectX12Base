@@ -13,6 +13,8 @@ private:
 
 	CTexture				m_Texture;
 
+	XMFLOAT4				m_Param;
+
 public:
 	CPolygonDeferred();
 

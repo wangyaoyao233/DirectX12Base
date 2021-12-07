@@ -1,6 +1,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "polygon_deferred.h"
+#include "input.h"
 
 CPolygonDeferred::CPolygonDeferred()
 {
@@ -61,10 +62,68 @@ void CPolygonDeferred::Initialize()
 	m_VertexBuffer->Unmap(0, nullptr);
 
 	m_Texture.Load("asset/field004.tga");
+
+
+	/*
+	float roughness = 0.0;
+	float metallic = 1.0;
+	float spec = 0.9;
+	*/
+	m_Param = { 0.0f, 1.0f, 0.9f, 0.0f };
 }
 
 void CPolygonDeferred::Update()
 {
+	//roughness
+	if (CInput::GetKeyTrigger('Q'))
+	{
+		if (m_Param.x >= 0.0f)
+		{
+			m_Param.x -= 0.1f;
+		}
+	}
+	if (CInput::GetKeyTrigger('W'))
+	{
+		if (m_Param.x <= 1.0f)
+		{
+			m_Param.x += 0.1f;
+		}
+	}
+	//metallic
+	if (CInput::GetKeyTrigger('A'))
+	{
+		if (m_Param.y >= 0.0f)
+		{
+			m_Param.y -= 0.1f;
+		}
+	}
+	if (CInput::GetKeyTrigger('S'))
+	{
+		if (m_Param.z <= 1.0f)
+		{
+			m_Param.z += 0.1f;
+		}
+	}
+	//spec
+	if (CInput::GetKeyTrigger('Z'))
+	{
+		if (m_Param.z >= 0.0f)
+		{
+			m_Param.z -= 0.1f;
+		}
+	}
+	if (CInput::GetKeyTrigger('X'))
+	{
+		if (m_Param.z <= 1.0f)
+		{
+			m_Param.z += 0.1f;
+		}
+	}
+
+	if (CInput::GetKeyTrigger('P'))
+	{
+		m_Param.w = 1.0 - m_Param.w;
+	}
 }
 
 void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12DescriptorHeap* Texture)
@@ -94,6 +153,9 @@ void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12Descri
 	//Light
 	//constant->LightDirection = { 0, -1, 0, 0 };
 	//constant->CameraPostion = { 0,0,0,0 };
+
+
+	constant->Param = m_Param;
 
 	m_ConstantBuffer->Unmap(0, nullptr);
 

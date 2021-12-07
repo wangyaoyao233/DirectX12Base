@@ -1,6 +1,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "DDSTextureLoader12.h"
+#include "input.h"
 
 CRenderer* CRenderer::m_Instance = nullptr;
 
@@ -28,6 +29,9 @@ CRenderer::CRenderer()
 	m_ScissorRect.bottom = m_WindowHeight;
 
 	Initialize();
+
+	CInput::Init();
+
 	m_Polygon = std::make_unique<CPolygon>();
 	m_Field = std::make_unique<CField>();
 	m_Cube = std::make_unique<CCube>();
@@ -40,6 +44,11 @@ CRenderer::CRenderer()
 	m_PolygonDeferred = std::make_unique<CPolygonDeferred>();
 
 	m_Player = std::make_unique<CPlayer>();
+}
+
+CRenderer::~CRenderer()
+{
+	CInput::Uninit();
 }
 
 void CRenderer::Initialize()
@@ -768,15 +777,18 @@ void CRenderer::Initialize()
 
 void CRenderer::Update()
 {
+	CInput::Update();
 	m_Polygon->Update();
 	m_Field->Update();
 	m_Cube->Update();
+	m_Player->Update();
+
 
 	m_Camera3D->Update();
 	m_Camera2D->Update();
 	//m_Light->Update();
 
-	m_Player->Update();
+	m_PolygonDeferred->Update();
 }
 
 void CRenderer::Draw()

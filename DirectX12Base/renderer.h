@@ -23,6 +23,7 @@ struct Constant
 {
 	XMFLOAT4X4 WVP;
 	XMFLOAT4X4 World;
+	XMFLOAT4 Param;
 	//XMFLOAT4 LightDirection;
 	//XMFLOAT4 CameraPostion;
 };
@@ -97,6 +98,7 @@ private:
 public:
 
 	CRenderer();
+	~CRenderer();
 
 	void Initialize();
 	void Update();
