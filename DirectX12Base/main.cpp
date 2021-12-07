@@ -111,6 +111,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 				// 描画処理
 				renderer.Draw();
+				
 			}
 		}
 	}
