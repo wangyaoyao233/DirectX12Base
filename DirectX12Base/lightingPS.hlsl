@@ -30,6 +30,9 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {  
+    if (Param.w == 0.5)
+        return envTex.Sample(sampler0, input.TexCoord) * 1.2;
+
     float4 normal = normalize(normalTex.Sample(sampler0, input.TexCoord));
     float4 color = colorTex.Sample(sampler0, input.TexCoord);
     float4 worldPos = worldPosTex.Sample(sampler0, input.TexCoord);

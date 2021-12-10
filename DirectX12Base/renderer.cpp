@@ -30,6 +30,34 @@ CRenderer::CRenderer()
 
 	Initialize();
 
+	//ImGUI
+	{
+		{
+			D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+			desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+			desc.NumDescriptors = 1;
+			desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+			HRESULT hr = m_Device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_ImGUISRVDescriptorHeap));
+			assert(SUCCEEDED(hr));
+		}
+
+		// Setup Imgui
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO io = ImGui::GetIO(); (void)io;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+		//ImGui::StyleColorsDark();
+		ImGui::StyleColorsClassic();
+
+		ImGui_ImplWin32_Init(m_WindowHandle);
+		ImGui_ImplDX12_Init(m_Device.Get(), 2, DXGI_FORMAT_R8G8B8A8_UNORM,
+			m_ImGUISRVDescriptorHeap.Get(),
+			m_ImGUISRVDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
+			m_ImGUISRVDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+	}
+
 	CInput::Init();
 
 	m_Polygon = std::make_unique<CPolygon>();
@@ -44,6 +72,8 @@ CRenderer::CRenderer()
 	m_PolygonDeferred = std::make_unique<CPolygonDeferred>();
 
 	m_Player = std::make_unique<CPlayer>();
+
+	m_Sky = std::make_unique<CSky>();
 }
 
 CRenderer::~CRenderer()
@@ -608,6 +638,7 @@ void CRenderer::Initialize()
 
 		//ラスタライザステート
 		pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		//pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 		pipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 		pipelineStateDesc.RasterizerState.FrontCounterClockwise = FALSE;
 		pipelineStateDesc.RasterizerState.DepthBias = 0;
@@ -723,6 +754,7 @@ void CRenderer::Initialize()
 
 		//ラスタライザステート
 		pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		//pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 		pipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 		pipelineStateDesc.RasterizerState.FrontCounterClockwise = FALSE;
 		pipelineStateDesc.RasterizerState.DepthBias = 0;
@@ -796,6 +828,13 @@ void CRenderer::Draw()
 	HRESULT hr;
 	FLOAT clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	//ImGUI
+	{
+		ImGui_ImplDX12_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+
 	//ジオメトリパス
 	{
 		//レンダーターゲット用リソースバリア
@@ -824,6 +863,7 @@ void CRenderer::Draw()
 
 		//オブジェクト描画
 		m_Camera3D->Draw();
+		m_Sky->Draw(m_GraphicsCommandList.Get());
 		//m_Field->Draw(m_GraphicsCommandList.Get());
 		m_Cube->Draw(m_GraphicsCommandList.Get());
 		m_Player->Draw(m_GraphicsCommandList.Get());
@@ -856,6 +896,15 @@ void CRenderer::Draw()
 
 		//2Dポリゴン描画
 		m_PolygonDeferred->Draw(m_GraphicsCommandList.Get(), m_SRVDescriptorHeap.Get());
+
+		//ImGUI
+		{
+			ID3D12DescriptorHeap* dh[] = { m_ImGUISRVDescriptorHeap.Get() };
+			m_GraphicsCommandList->SetDescriptorHeaps(1, dh);
+
+			ImGui::Render();
+			ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_GraphicsCommandList.Get());
+		}
 
 		//プレゼント用リソースバリア
 		SetResourceBarrier(m_RenderTarget[m_RTIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);

@@ -77,14 +77,14 @@ void CPolygonDeferred::Update()
 	//roughness
 	if (CInput::GetKeyTrigger('Q'))
 	{
-		if (m_Param.x >= 0.0f)
+		if (m_Param.x > 0.0f)
 		{
 			m_Param.x -= 0.1f;
 		}
 	}
 	if (CInput::GetKeyTrigger('W'))
 	{
-		if (m_Param.x <= 1.0f)
+		if (m_Param.x < 1.0f)
 		{
 			m_Param.x += 0.1f;
 		}
@@ -92,14 +92,14 @@ void CPolygonDeferred::Update()
 	//metallic
 	if (CInput::GetKeyTrigger('A'))
 	{
-		if (m_Param.y >= 0.0f)
+		if (m_Param.y > 0.0f)
 		{
 			m_Param.y -= 0.1f;
 		}
 	}
 	if (CInput::GetKeyTrigger('S'))
 	{
-		if (m_Param.z <= 1.0f)
+		if (m_Param.z < 1.0f)
 		{
 			m_Param.z += 0.1f;
 		}
@@ -107,14 +107,14 @@ void CPolygonDeferred::Update()
 	//spec
 	if (CInput::GetKeyTrigger('Z'))
 	{
-		if (m_Param.z >= 0.0f)
+		if (m_Param.z > 0.0f)
 		{
 			m_Param.z -= 0.1f;
 		}
 	}
 	if (CInput::GetKeyTrigger('X'))
 	{
-		if (m_Param.z <= 1.0f)
+		if (m_Param.z < 1.0f)
 		{
 			m_Param.z += 0.1f;
 		}
@@ -153,6 +153,17 @@ void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12Descri
 	//Light
 	//constant->LightDirection = { 0, -1, 0, 0 };
 	//constant->CameraPostion = { 0,0,0,0 };
+
+	//ImGUI
+	{
+		ImGui::Begin("Param set");
+
+		ImGui::SliderFloat("roughness", &m_Param.x, 0.0f, 1.0f);
+		ImGui::SliderFloat("metallic", &m_Param.y, 0.0f, 1.0f);
+		ImGui::SliderFloat("spec", &m_Param.z, 0.0f, 1.0f);
+
+		ImGui::End();
+	}
 
 
 	constant->Param = m_Param;

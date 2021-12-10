@@ -1,13 +1,14 @@
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx12.h"
+
 #include "main.h"
 #include "renderer.h"
 
 const char* CLASS_NAME = "DX12AppClass";
 const char* WINDOW_NAME = "DirectX12";
 
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 HWND g_Window;
 
@@ -57,22 +58,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	// レンダラー初期化
 	CRenderer renderer;
-
-	// Setup Imgui
-	//IMGUI_CHECKVERSION();
-	//ImGui::CreateContext();
-	//ImGuiIO io = ImGui::GetIO(); (void)io;
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	////io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-
-	////ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-
-	//ImGui_ImplWin32_Init(g_Window);
-	//ImGui_ImplDX12_Init(renderer.GetDevice().Get(), 3, DXGI_FORMAT_R8G8B8A8_UNORM,
-	//	renderer.GetDescriptorHeap().Get(),
-	//	renderer.GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
-	//	renderer.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	//フレームカウント初期化
 	DWORD dwExecLastTime;
@@ -126,6 +111,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		return true;
+
 	switch (uMsg)
 	{
 	case WM_DESTROY:

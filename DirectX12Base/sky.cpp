@@ -59,6 +59,11 @@ void CSky::Draw(ID3D12GraphicsCommandList* CommandList)
 	XMMATRIX world = XMMatrixIdentity();
 
 	//scale
+	world *= XMMatrixScaling(10, 10, 10);
+
+	//texture
+
+	//back
 
 	//定数バッファ設定
 	Constant* constant;
@@ -70,6 +75,8 @@ void CSky::Draw(ID3D12GraphicsCommandList* CommandList)
 	constant->WVP = matrix;
 	XMStoreFloat4x4(&matrix, XMMatrixTranspose(world));
 	constant->World = matrix;
+
+	constant->Param = { 0, 0, 0, 0.5 };
 
 	m_ConstantBuffer->Unmap(0, nullptr);
 

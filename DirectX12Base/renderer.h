@@ -11,6 +11,7 @@ using namespace Microsoft::WRL;
 #include "camera_3d.h"
 #include "light.h"
 #include "player.h"
+#include "sky.h"
 
 struct Vertex3D
 {
@@ -29,6 +30,7 @@ struct Constant
 };
 
 class CPlayer;
+class CSky;
 
 class CRenderer
 {
@@ -81,6 +83,9 @@ private:
 	ComPtr<ID3D12Resource>				m_EnvResource;// env texture
 	ComPtr<ID3D12Resource>				m_IBLResource;// IBL texture
 
+	//ImGUI
+	ComPtr<ID3D12DescriptorHeap>		m_ImGUISRVDescriptorHeap;
+
 
 	std::unique_ptr<CPolygon>			m_Polygon;
 	std::unique_ptr<CField>				m_Field;
@@ -94,6 +99,8 @@ private:
 	std::unique_ptr<CPolygonDeferred>	m_PolygonDeferred;
 
 	std::unique_ptr<CPlayer>			m_Player;
+
+	std::unique_ptr<CSky>				m_Sky;
 
 public:
 
