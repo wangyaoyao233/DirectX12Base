@@ -13,6 +13,8 @@ private:
 	std::unique_ptr<CModel> m_Model;
 	ComPtr<ID3D12Resource>	m_ConstantBuffer;
 
+	CTexture				m_Texture;
+
 public:
 	CSky();
 	~CSky();

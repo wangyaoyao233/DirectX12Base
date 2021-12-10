@@ -754,7 +754,6 @@ void CRenderer::Initialize()
 
 		//ラスタライザステート
 		pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-		//pipelineStateDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 		pipelineStateDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
 		pipelineStateDesc.RasterizerState.FrontCounterClockwise = FALSE;
 		pipelineStateDesc.RasterizerState.DepthBias = 0;
@@ -862,11 +861,12 @@ void CRenderer::Draw()
 		m_GraphicsCommandList->OMSetRenderTargets(NUM_GBUFFER, m_RTHandleGeometry, TRUE, &m_DSHandle);
 
 		//オブジェクト描画
-		m_Camera3D->Draw();
-		m_Sky->Draw(m_GraphicsCommandList.Get());
+		m_Camera3D->Draw();		
 		//m_Field->Draw(m_GraphicsCommandList.Get());
 		m_Cube->Draw(m_GraphicsCommandList.Get());
 		m_Player->Draw(m_GraphicsCommandList.Get());
+
+		m_Sky->Draw(m_GraphicsCommandList.Get());
 
 		m_Camera2D->Draw();
 		//m_Polygon->Draw(m_GraphicsCommandList.Get());

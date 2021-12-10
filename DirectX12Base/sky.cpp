@@ -40,6 +40,8 @@ void CSky::Initialize()
 
 	m_Model = std::make_unique<CModel>();
 	m_Model->Load("./asset/sky.obj");
+
+	m_Texture.Load("asset/envmap.tga");
 }
 
 void CSky::Update()
@@ -51,17 +53,16 @@ void CSky::Draw(ID3D12GraphicsCommandList* CommandList)
 	HRESULT hr;
 
 	//マトリクス設定
-	//XMMATRIX view = XMMatrixLookAtLH({ 0.0,2.0,-5.0 }, { 0.0,0.0,0.0 }, { 0.0,1.0,0.0 });
-	//XMMATRIX projection = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 20.0f);
-	XMMATRIX view = CRenderer::GetInstance()->GetCamera3D()->GetViewMatrix();
-	XMMATRIX projection = CRenderer::GetInstance()->GetCamera3D()->GetProjectionMatrix();
+	XMMATRIX view = XMMatrixLookAtLH({ 0.0,2.0,-5.0 }, { 0.0,0.0,0.0 }, { 0.0,1.0,0.0 });
+	XMMATRIX projection = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 100.0f);
+	//XMMATRIX view = CRenderer::GetInstance()->GetCamera3D()->GetViewMatrix();
+	//XMMATRIX projection = CRenderer::GetInstance()->GetCamera3D()->GetProjectionMatrix();
 
 	XMMATRIX world = XMMatrixIdentity();
 
 	//scale
 	world *= XMMatrixScaling(10, 10, 10);
-
-	//texture
+	world *= XMMatrixTranslation(0.0f, 2.0f, -5.0f);
 
 	//back
 
@@ -76,11 +77,16 @@ void CSky::Draw(ID3D12GraphicsCommandList* CommandList)
 	XMStoreFloat4x4(&matrix, XMMatrixTranspose(world));
 	constant->World = matrix;
 
-	constant->Param = { 0, 0, 0, 0.5 };
+	//constant->Param = { 0, 0, 0, 0.5 };
 
 	m_ConstantBuffer->Unmap(0, nullptr);
 
 	CommandList->SetGraphicsRootConstantBufferView(0, m_ConstantBuffer->GetGPUVirtualAddress());
+
+	//テクスチャ設定
+	ID3D12DescriptorHeap* dh[] = { *m_Texture.GetDescriptorHeap().GetAddressOf() };
+	CommandList->SetDescriptorHeaps(_countof(dh), dh);
+	CommandList->SetGraphicsRootDescriptorTable(1, m_Texture.GetDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 	m_Model->Draw(CommandList);
 }

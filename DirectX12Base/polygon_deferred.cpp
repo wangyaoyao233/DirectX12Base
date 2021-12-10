@@ -158,9 +158,10 @@ void CPolygonDeferred::Draw(ID3D12GraphicsCommandList* CommandList, ID3D12Descri
 	{
 		ImGui::Begin("Param set");
 
-		ImGui::SliderFloat("roughness", &m_Param.x, 0.0f, 1.0f);
-		ImGui::SliderFloat("metallic", &m_Param.y, 0.0f, 1.0f);
-		ImGui::SliderFloat("spec", &m_Param.z, 0.0f, 1.0f);
+		ImGui::SliderFloat("roughness", &m_Param.x, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat("metallic", &m_Param.y, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat("spec", &m_Param.z, 0.0f, 1.0f, "%.1f");
+		ImGui::SliderFloat("w", &m_Param.w, 0.0f, 1.0f, "%.1f");
 
 		ImGui::End();
 	}
